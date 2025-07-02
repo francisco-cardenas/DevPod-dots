@@ -24,5 +24,5 @@ else
     echo "No supported package manager found. Skipping vim install."
 fi
 
-
+source ~/.bashrc
 echo "Devpod Successfully setup!"
