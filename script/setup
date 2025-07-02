@@ -11,6 +11,14 @@ echo "Running DevPod dotfiles install script..."
 #echo 'export TERM=xterm-256color' >> ~/.bashrc
 #echo 'export TERM=xterm-256color' >> ~/.profile
 
+# --- Install chezmoi & configure dotfile ---
+set -euo pipefail
+
+if ! command -v chezmoi >/dev/null; then
+    sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:cardenas-sec/devpod-dotfiles.git
+fi
+
+
 # --- Install Vim ---
 echo "Installing vim..."
 if command -v apt &>/dev/null; then
@@ -23,3 +31,5 @@ else
 fi
 
 echo "Devpod Successfully setup!"
+
+exit 0
