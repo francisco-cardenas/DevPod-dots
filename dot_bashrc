@@ -158,3 +158,6 @@ fi
 
 # Fix Ghostty
 export TERM=xterm-256color
+
+# Mise
+eval "$(mise activate bash)"
