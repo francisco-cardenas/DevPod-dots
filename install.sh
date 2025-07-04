@@ -1,4 +1,5 @@
 #!/bin/bash
+# Initial install script to run on devpod
 set -euo pipefail
 
 echo "Running DevPod dotfiles install script..."
