@@ -15,6 +15,7 @@ echo "Running DevPod dotfiles install script..."
 # --- Install chezmoi & configure dotfile ---
 if ! command -v chezmoi >/dev/null; then
     sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:cardenas-sec/devpod-dotfiles.git
+    echo "Installed chezmoi and ran init apply "
 fi
 
 
