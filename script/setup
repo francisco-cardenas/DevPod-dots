@@ -1,2 +1,5 @@
 #!/bin/bash
 # Post create script to run on devpod
+
+# Chezmoi trust
+/usr/local/bin/mise trust /workspaces/dockerfile-devcontainer/mise.toml 
