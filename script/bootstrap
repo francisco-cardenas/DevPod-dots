@@ -29,7 +29,7 @@ if command -v apt >/dev/null; then
 
     if ! command -v vim >/dev/null; then
         echo "Installing vim"
-        sudo apt install vim
+        sudo apt install vim -y
     else
         echo "vim is already installed!"
     fi  
