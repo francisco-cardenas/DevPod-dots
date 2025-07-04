@@ -13,9 +13,13 @@ echo "Running DevPod dotfiles install script..."
 #echo 'export TERM=xterm-256color' >> ~/.profile
 
 # --- Install chezmoi & configure dotfile ---
-if ! command -v chezmoi >/dev/null; then
-    sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:cardenas-sec/devpod-dotfiles.git
-    echo "Installed chezmoi and ran init apply "
+if sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:cardenas-sec/devpod-dotfiles.git; then
+    echo "Installed chezmoi and ran init apply successfully"
+    echo "cleaning up binary of chezmoi. Chezmoi is to be used from mise install."
+    rm -rf bin
+else
+    echo "Failed to install chezmoi or run init --apply" >&2
+    exit 1
 fi
 
 
