@@ -16,6 +16,7 @@ echo "Running DevPod dotfiles install script..."
 if sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:francisco-cardenas/DevPod-dots.git; then
     echo "Installed chezmoi and ran init apply successfully"
     echo "cleaning up binary of chezmoi. Chezmoi is to be used from mise install."
+    # This install of chezmoi is temporary for the bootstrap. Mise will finish installing it
     rm -rf bin
 else
     echo "Failed to install chezmoi or run init --apply" >&2
