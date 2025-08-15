@@ -41,4 +41,4 @@ alias lt='ls --tree'
 DISABLE_AUTO_UPDATE=true
 DISABLE_UPDATE_PROMPT=true
 
-eval "$(mise activate zsh)
+eval "$(mise activate zsh)"
