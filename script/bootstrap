@@ -23,21 +23,3 @@ else
     exit 1
 fi
 
-# -- Check for apt package manager and isntall missing packages ---
-if command -v apt >/dev/null; then
-    echo "apt detected. Updating package lists..."
-    sudo apt update
-
-    if ! command -v vim || ! command -v nvim >/dev/null; then
-        echo "Installing vim (neither vim nor nvim found)"
-        sudo apt install vim -y
-    else
-        echo "vim is already installed!"
-    fi  
-else
-  echo "Package manager apt not found. Skipping..."
-fi
-
-echo "Devpod Successfully setup!"
-
-exit 0
