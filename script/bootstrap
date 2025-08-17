@@ -28,8 +28,8 @@ if command -v apt >/dev/null; then
     echo "apt detected. Updating package lists..."
     sudo apt update
 
-    if ! command -v vim >/dev/null; then
-        echo "Installing vim"
+    if ! command -v vim && ! command -v nvim >/dev/null; then
+        echo "Installing vim (neither vim nor nvim found)"
         sudo apt install vim -y
     else
         echo "vim is already installed!"
