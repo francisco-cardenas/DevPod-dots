@@ -2,45 +2,34 @@
 # Initial install script to run on devpod
 set -euo pipefail
 
+log() { printf '%s\n' "[INFO] $*"; }
+warn() { printf '%s\n' "[WARN] $*" >&2; }
+err() { printf '%s\n' "[ERROR] $*" >&2; }
+
 echo "Running DevPod dotfiles install script..."
-
-# --- Fix TERM for Ghostty ---
-#echo "  Setting fallback TERM to xterm-256color"
-#export TERM=xterm-256color
-
-# Apply to bash sessions going forward
-#echo 'export TERM=xterm-256color' >> ~/.bashrc
-#echo 'export TERM=xterm-256color' >> ~/.profile
 
 # --- Install chezmoi & configure dotfile ---
 if sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:francisco-cardenas/DevPod-dots.git; then
-  echo "Installed chezmoi and ran init apply successfully"
-  echo "cleaning up binary of chezmoi. Chezmoi is to be used from mise install."
+  log "Installed chezmoi and ran init apply successfully"
+  log "cleaning up binary of chezmoi. Chezmoi is to be used from mise install."
+
   # This install of chezmoi is temporary for the bootstrap. Mise will finish installing it
-  #rm -rf bin # Testing without removal
+  rm -rf bin # Testing without removal
 else
-  echo "Failed to install chezmoi or run init --apply" >&2
+  err "Failed to install chezmoi or run init --apply" >&2
   exit 1
 fi
 
-# --- Configure user ---
-# Get the current user (in DevPod this is usually 'devpod' or 'vscode')
+# --- Switch to zsh if available ---
 USER_NAME="$(whoami)"
+ZSH_BIN="$(command -v zsh || true)"
 
-# Check for password from env, else prompt
-if [[ -z "${DEVPOD_PASS:-}" ]]; then
-  read -rsp "Enter password for ${USER_NAME}: " DEVPOD_PASS
-  echo
-fi
-
-# Update the user's password
-echo "${USER_NAME}:${DEVPOD_PASS}" | sudo chpasswd
-echo "[INFO] Password updated for ${USER_NAME}"
-
-# Change default shell to zsh for the user
-if [[ "$SHELL" != "$(command -v zsh)" ]]; then
-  echo "[INFO] Changing default shell to zsh..."
-  sudo chsh -s "$(command -v zsh)" "$USER_NAME"
+log "Changing login shell for $USER_NAME to $ZSH_BIN"
+if sudo -n chsh -s "$ZSH_BIN" "$USER_NAME"; then
+  log "Shell changed successfully for $USER_NAME"
+else
+  err "Failed to change shell (need root or passwordless sudo)"
+  exit 1
 fi
 
 # --- Exit ---
