@@ -14,12 +14,34 @@ echo "Running DevPod dotfiles install script..."
 
 # --- Install chezmoi & configure dotfile ---
 if sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:francisco-cardenas/DevPod-dots.git; then
-    echo "Installed chezmoi and ran init apply successfully"
-    echo "cleaning up binary of chezmoi. Chezmoi is to be used from mise install."
-    # This install of chezmoi is temporary for the bootstrap. Mise will finish installing it
-    rm -rf bin
+  echo "Installed chezmoi and ran init apply successfully"
+  echo "cleaning up binary of chezmoi. Chezmoi is to be used from mise install."
+  # This install of chezmoi is temporary for the bootstrap. Mise will finish installing it
+  rm -rf bin
 else
-    echo "Failed to install chezmoi or run init --apply" >&2
-    exit 1
+  echo "Failed to install chezmoi or run init --apply" >&2
+  exit 1
 fi
 
+# --- Configure user ---
+# Get the current user (in DevPod this is usually 'devpod' or 'vscode')
+USER_NAME="$(whoami)"
+
+# Check for password from env, else prompt
+if [[ -z "${DEVPOD_PASS:-}" ]]; then
+  read -rsp "Enter password for ${USER_NAME}: " DEVPOD_PASS
+  echo
+fi
+
+# Update the user's password
+echo "${USER_NAME}:${DEVPOD_PASS}" | sudo chpasswd
+echo "[INFO] Password updated for ${USER_NAME}"
+
+# Change default shell to zsh for the user
+if [[ "$SHELL" != "$(command -v zsh)" ]]; then
+  echo "[INFO] Changing default shell to zsh..."
+  sudo chsh -s "$(command -v zsh)" "$USER_NAME"
+fi
+
+# --- Exit ---
+echo "[OK] Bootstrap complete."
