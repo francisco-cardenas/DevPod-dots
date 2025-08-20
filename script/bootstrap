@@ -32,5 +32,32 @@ else
   exit 1
 fi
 
+# --- Ghostty terminfo ---
+compile_terminfo_if_missing() {
+  local name="$1" file="$2" outdir="${3:-$HOME/.terminfo}"
+
+  if infocmp -x "$name" >/dev/null 2>&1; then
+    log "Terminfo present: $name"
+    return 0
+  fi
+
+  if [[ ! -f "$file" ]]; then
+    warn "Vendored terminfo file missing: $file"
+    return 1
+  fi
+
+  mkdir -p "$outdir"
+  log "Installing terminfo: $name -> $outdir"
+  tic -x -o "$outdir" "$file" || {
+    err "tic failed for $name ($file)"
+    return 1
+  }
+  return 0
+}
+
+# Call with paths relative to your dotfiles root
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"   # adjust if needed
+compile_terminfo_if_missing xterm-ghostty   "$DOTFILES_DIR/terminfo/xterm-ghostty.ti"
+
 # --- Exit ---
 echo "[OK] Bootstrap complete."
