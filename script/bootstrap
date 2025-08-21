@@ -63,7 +63,7 @@ compile_terminfo_if_missing() {
 
   # Fallback: also try chezmoi working tree if vendored there
   if [[ ! -f "$file" ]]; then
-    local cm="$HOME/.local/share/chezmoi/terminfo/$(basename "$file")"
+    local cm="$HOME/.local/share/chezmoi/script/terminfo/$(basename "$file")"
     if [[ -f "$cm" ]]; then
       file="$cm"
     fi
